@@ -1,5 +1,6 @@
 package CS4320_HW1;
-
+import java.io.File;
+import java.util.Scanner;
 
 public class Main {
 
@@ -7,47 +8,47 @@ public class Main {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		BPlusTree myTree = new BPlusTree(5); 
-		myTree.insert(0, "2");
-		myTree.delete(0);
-		myTree.insert(1, "2");
-		myTree.insert(2, "2");
-		myTree.insert(4, "4");
-		Utils.printTree(myTree);
-		myTree.insert(5, "5");
-		Utils.printTree(myTree);
-		myTree.insert(5, "4");
-		Utils.printTree(myTree);
-		myTree.insert(7, "7");
-		Utils.printTree(myTree);
-		myTree.insert(8, "8");
-		myTree.insert(9, "9");
-		myTree.insert(10, "10");
-		myTree.insert(11, "11");
-		myTree.insert(12, "12");
-		myTree.insert(13, "13");
-		if(myTree.exist(12)){
-			System.out.print("YES\n");
-		}
-		else{
-			System.out.print("NO\n");
-		}
-		if(myTree.exist(16)){
-			System.out.print("YES\n");
-		}
-		else{
-			System.out.print("NO\n");
-		}
-		if(myTree.exist(4)){
-			System.out.print("YES\n");
-		}
-		else{
-			System.out.print("NO\n");
-		}
-		myTree.deleteall(5);
-		System.out.print(myTree.find(1,1));
-		System.out.print(myTree.find(2,10));
-		Utils.printTree(myTree);
+		BPlusTree myTree = new BPlusTree(3); 
+		try {
+            //System.out.print("Enter the file name with extension : ");
+
+            Scanner input = new Scanner(System.in);
+
+            File file = new File(input.nextLine());
+
+            input = new Scanner(file);
+
+
+            while (input.hasNextLine()) {
+				String line = input.nextLine();
+				String[] result = line.split("\\s");
+                if (result[0].equals("FIND")){
+					
+					if(myTree.exist(Integer.valueOf(result[1]))){
+						System.out.print("YES\n");
+					}
+					else{
+						System.out.print("NO\n");
+					}
+				}
+				else if (result[0].equals("INSERT")){
+					myTree.insert(Integer.valueOf(result[1]), 1);
+				}
+				else if (result[0].equals("COUNT")){
+					System.out.print(myTree.find(Integer.valueOf(result[1]), Integer.valueOf(result[1])));
+					System.out.print("\n");
+				}
+				else{
+					System.out.print(myTree.find(Integer.valueOf(result[1]), Integer.valueOf(result[2])));
+					System.out.print("\n");
+				}
+            }
+            input.close();
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+		//Utils.printTree(myTree);
 	}
 
 }

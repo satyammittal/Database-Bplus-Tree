@@ -17,7 +17,7 @@ public class Utils {
 	 */
 	public static void bulkInsert(BPlusTree b, int[] tests) {
 		for (int i = 0; i < tests.length; i++) {
-			b.insert(tests[i], String.valueOf(tests[i]));
+			b.insert(tests[i], tests[i]);
 		}
 
 	}

@@ -35,10 +35,11 @@ public class BPlusTree {
 	 * @param key
 	 * @return value
 	 */
-	public String search(int key) {
+	public Integer search(int key) {
 		// look for leaf node that should contain key
 		LeafNode leaf = findLeafNodeWithKey(root, key);
-
+		if(leaf==null)
+			return null;
 		// look for value within leaf
 		for (int i = 0; i < leaf.keys.size(); i++){
 			if (leaf.keys.get(i) == key){
@@ -56,23 +57,24 @@ public class BPlusTree {
 	public int recursivefind(LeafNode leaf, int key1, int key2)
 	{
 		int count=0;
+		
 		if(leaf==null || key2<leaf.keys.get(0))
 			return 0;
-		else if (key2>=leaf.keys.get(leaf.keys.size()-1))
-			count+=leaf.keys.size()+recursivefind(leaf.nextLeaf,key1, key2);
 		else
 		{
 			// look for value within leaf
 			for (int i = 0; i < leaf.keys.size(); i++){
 				if (leaf.keys.get(i) >= key1 && leaf.keys.get(i)<=key2){
-					count++; 
+					count+=leaf.values.get(i); 
 				}
 			}
+			count+=recursivefind(leaf.nextLeaf,key1, key2);
 		}
 		return count;
 	}
 
 	public boolean exist(int key){
+		//System.out.print(search(key)+'\n');
 		if (search(key)==null){
 			return false;
 		}
@@ -84,7 +86,7 @@ public class BPlusTree {
 	 * @param key
 	 * @param value
 	 */
-	public void insert(int key, String value) {
+	public void insert(int key, int value) {
 		// initial insert to tree
 		if (root == null){
 			root = new LeafNode(key, value);
@@ -98,7 +100,7 @@ public class BPlusTree {
 		}
 
 	}
-	private Entry<Integer, Node> insertHelper(Node node, int key, String value){
+	private Entry<Integer, Node> insertHelper(Node node, int key, int value){
 		Entry<Integer,Node> overflow = null; 
 		if (node.isLeafNode){
 			LeafNode leaf = (LeafNode) node; 
@@ -137,8 +139,9 @@ public class BPlusTree {
 				indexAtParent = idxNode.children.size(); 
 			} else {
 				for (int i = 0; i < idxNode.keys.size(); i++){
-					if (i < idxNode.keys.get(i)){
+					if (splittingKey < idxNode.keys.get(i)){
 						indexAtParent = i;
+						break;
 					}
 				}
 			}
@@ -178,7 +181,7 @@ public class BPlusTree {
 		int RIGHT_BUCKET_SIZE = lD+1;
 		 
 		ArrayList<Integer> rightKeys = new ArrayList<Integer>(RIGHT_BUCKET_SIZE); 
-		ArrayList<String> rightValues = new ArrayList<String>(RIGHT_BUCKET_SIZE);
+		ArrayList<Integer> rightValues = new ArrayList<Integer>(RIGHT_BUCKET_SIZE);
 		
 		rightKeys.addAll(leaf.keys.subList(lD, leaf.keys.size()));
 		rightValues.addAll(leaf.values.subList(lD, leaf.values.size())); 

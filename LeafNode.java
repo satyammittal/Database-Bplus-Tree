@@ -5,22 +5,22 @@ import java.util.List;
 import java.util.ListIterator;
 
 public class LeafNode extends Node {
-	protected ArrayList<String> values;
+	protected ArrayList<Integer> values;
 	protected LeafNode nextLeaf;
 
-	public LeafNode(int firstKey, String firstValue) {
+	public LeafNode(int firstKey, int firstValue) {
 		isLeafNode = true;
 		keys = new ArrayList<Integer>();
-		values = new ArrayList<String>();
+		values = new ArrayList<Integer>();
 		keys.add(firstKey);
 		values.add(firstValue);
 
 	}
 
-	public LeafNode(List<Integer> newKeys, List<String> newValues) {
+	public LeafNode(List<Integer> newKeys, List<Integer> newValues) {
 		isLeafNode = true;
 		keys = new ArrayList<Integer>(newKeys);
-		values = new ArrayList<String>(newValues);
+		values = new ArrayList<Integer>(newValues);
 
 	}
 
@@ -30,7 +30,7 @@ public class LeafNode extends Node {
 	 * @param key
 	 * @param value
 	 */
-	public void insertSorted(int key, String value) {
+	public void insertSorted(int key, int value) {
 		if (key < keys.get(0)) {
 			keys.add(0, key);
 			values.add(0, value);
@@ -40,7 +40,13 @@ public class LeafNode extends Node {
 		} else {
 			ListIterator<Integer> iterator = keys.listIterator();
 			while (iterator.hasNext()) {
-				if (iterator.next() >= key) {
+				int k = iterator.next();
+				if (k == key){
+					int x = values.get(iterator.previousIndex());
+					values.set(iterator.previousIndex(),x+1);
+					break;
+				}
+				else if (k > key) {
 					int position = iterator.previousIndex();
 					keys.add(position, key);
 					values.add(position, value);
