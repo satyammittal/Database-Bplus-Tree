@@ -2,21 +2,25 @@ package bplustree;
 import java.io.File;
 import java.util.Scanner;
 
+import java.lang.Math;
+
 public class Main {
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		BPlusTree myTree = new BPlusTree(3); 
 		try {
+			int M = Integer.valueOf(args[1]);
+			int B = Integer.valueOf(args[2]);
+			int d = (B-8)/12;
+			d=Math.max(d,2);
+			BPlusTree myTree = new BPlusTree(d); 
             //System.out.print("Enter the file name with extension : ");
+            
+            File file = new File(args[0]);
 
-            Scanner input = new Scanner(System.in);
-
-            File file = new File(input.nextLine());
-
-            input = new Scanner(file);
+            Scanner input = new Scanner(file);
 
 
             while (input.hasNextLine()) {
